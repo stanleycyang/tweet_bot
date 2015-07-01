@@ -11,5 +11,9 @@
     "bot"
   ],
   "author": "Stanley Yang",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^1.2.0",
+    "twit": "^2.0.0"
+  }
 }
