@@ -12,12 +12,6 @@ function dateString(){
 };
 
 
-// Return a random item from array
-function randomIndex(array){
-    var index = Math.floor(array.length * Math.random());
-    return array[index];
-}
-
 // Function constructor for Bot
 var Bot = function(){
     this.twit = T;
@@ -50,6 +44,7 @@ Bot.prototype.followers = function(){
 
         // Respond with followers
         console.log(response);
+        return response;
         //console.log('\n# followers:' + response.ids.length.toString());
     });
 };
@@ -92,6 +87,8 @@ Bot.prototype.prune = function(callback){
 
 // Initialize new TweetBot!
 var TweetBot = new Bot();
+
+// Prune followers
 TweetBot.prune(function(error, response){
     if(error){
         return handleError(error);
@@ -102,14 +99,15 @@ TweetBot.prune(function(error, response){
 /*setInterval(function(){*/
 
     ////Tweet from the Bot
-    //TweetBot.tweet('Hello world from Botland!', function(error, response){
-        //if(error){
-            //return handleError(error);
-        //}
 
-        //console.log(response);
-    //});
+    TweetBot.tweet('Hello world from Botland!', function(error, response){
+        if(error){
+            return handleError(error);
+        }
+
+        console.log(response);
+    });
 
 
-//}, 10000);
+//}, 400000);
 
