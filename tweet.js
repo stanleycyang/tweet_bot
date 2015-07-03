@@ -85,28 +85,76 @@ Bot.prototype.prune = function(callback){
     });
 };
 
+// Search
+
+Bot.prototype.search = function(params){
+    var self = this;
+    self.twit.get('search/tweets', params, function(error, response){
+       if(error){
+           return handleError(error);
+       } 
+       var tweets = response.statuses,
+           numberOfTweets = tweets.length,
+           popular = '',
+           max = 0;
+
+/*       console.log(tweets[0].retweet_count);*/
+       /*console.log(tweets[0].favorite_count);*/
+
+       // Count down to no tweets
+       while(numberOfTweets--){
+            var tweet = tweets[numberOfTweets],
+                popularity = tweet.favorite_count;
+
+            if(popularity > max){
+                max = popularity;
+                popular = tweet.text;
+            }
+
+       }
+
+       // Tweet out the popular tweet
+       TweetBot.tweet(popular, function(error, response){
+            if(error){
+                return handleError(error);
+            }
+            console.log(response);
+       });
+    });
+}
+
+
 // Initialize new TweetBot!
 var TweetBot = new Bot();
 
 // Prune followers
-TweetBot.prune(function(error, response){
-    if(error){
-        return handleError(error);
-    }
-});
+/*TweetBot.prune(function(error, response){*/
+    //if(error){
+        //return handleError(error);
+    //}
+/*});*/
+
+var params = {
+    q: 'technology',
+    since: dateString(),
+    result_type: 'mixed'
+};
+
+TweetBot.search(params);
+
 
 // Every 40 seconds, execute this code
 /*setInterval(function(){*/
 
     ////Tweet from the Bot
 
-    TweetBot.tweet('Hello world from Botland!', function(error, response){
-        if(error){
-            return handleError(error);
-        }
+/*    TweetBot.tweet('Hello world from Botland!', function(error, response){*/
+        //if(error){
+            //return handleError(error);
+        //}
 
-        console.log(response);
-    });
+        //console.log(response);
+    //});
 
 
 //}, 400000);
