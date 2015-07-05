@@ -1,8 +1,3 @@
-function handleError(error){
-    console.error('response status: ', error.statusCode);
-    console.error('data:' + error.data);
-}
-
 function dateString(){
     var date = new Date(Date.now()- 5*60*60*1000);
     return date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1) + '-' + date.getDate();

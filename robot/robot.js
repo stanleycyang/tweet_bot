@@ -1,6 +1,12 @@
 // Source in configuration
 var T = require('./config');
 
+function handleError(error){
+    console.error('response status: ', error.statusCode);
+    console.error('data:' + error.data);
+}
+
+
 // Function constructor for Bot
 var Bot = function(){
     this.twit = T;
@@ -81,7 +87,7 @@ Bot.prototype.search = function(params){
     self.twit.get('search/tweets', params, function(error, response){
        if(error){
            return handleError(error);
-       } 
+       }
        var tweets = response.statuses,
            numberOfTweets = tweets.length,
            popular = '',
@@ -102,14 +108,13 @@ Bot.prototype.search = function(params){
 
        }
 
-       // Tweet out the popular tweet
-       // TweetBot.tweet(popular, function(error, response){
-       //      if(error){
-       //          return handleError(error);
-       //      }
-       //      console.log(response);
-       // });
-    	console.log(popular);
+        //Tweet out the popular tweet
+        self.tweet(popular, function(error, response){
+             if(error){
+                 return handleError(error);
+             }
+             console.log(response);
+        });
     });
 };
 
