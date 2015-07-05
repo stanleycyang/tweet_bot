@@ -29,7 +29,7 @@ var params = {
 // setInterval(function(){
 
     //Tweet from the Bot
-    TweetBot.search(params);
+TweetBot.search(params);
 
 
 // }, 43200000);

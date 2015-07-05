@@ -3,7 +3,7 @@ var T = require('./config');
 
 function handleError(error){
     console.error('response status: ', error.statusCode);
-    console.error('data:' + error.data);
+    console.error('data:' + error);
 }
 
 
@@ -12,21 +12,6 @@ var Bot = function(){
     this.twit = T;
 };
 
-// Post a tweet
-Bot.prototype.tweet = function(tweet, callback){
-
-    // Run the checks
-    if(typeof tweet !== 'string'){
-        // Throw error
-        return callback(new Error('Tweet must be a string'));
-    }else if(tweet.length > 140){
-        // Throw error
-        return callback(new Error('Tweet is too long'));
-    }
-
-    // Post the tweet
-    this.twit.post('statuses/update', {status: tweet}, callback);
-};
 
 
 // Follower information
@@ -80,8 +65,29 @@ Bot.prototype.prune = function(callback){
     });
 };
 
-// Search
+// Post a tweet
+Bot.prototype.tweet = function(tweet){
 
+    // Run the checks
+    if(typeof tweet !== 'string'){
+        // Throw error
+        return handleError(new Error('Tweet must be a string'));
+    }else if(tweet.length > 140){
+        // Throw error
+        return handleError(new Error('Tweet is too long'));
+    }
+
+    // Post the tweet
+    this.twit.post('statuses/update', {status: tweet}, function(error, response){
+      if(error){
+        return handleError(error);
+      }
+      console.log(response);
+    });
+};
+
+
+// Search
 Bot.prototype.search = function(params){
     var self = this;
     self.twit.get('search/tweets', params, function(error, response){
@@ -105,16 +111,10 @@ Bot.prototype.search = function(params){
                 max = popularity;
                 popular = tweet.text;
             }
-
        }
 
         //Tweet out the popular tweet
-        self.tweet(popular, function(error, response){
-             if(error){
-                 return handleError(error);
-             }
-             console.log(response);
-        });
+        self.tweet(popular);
     });
 };
 
